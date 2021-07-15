@@ -1,25 +1,31 @@
+require 'rspec'
 require './lib/stat_tracker'
 require 'simplecov'
-require 'csv'
-
+require 'CSV'
+require './lib/game'
 SimpleCov.start
 
 RSpec.describe StatTracker do
-  before(:all) do
-    @game_path = './data/games.csv'
-    @team_path = './data/teams.csv'
-    @game_teams_path = './data/game_teams.csv'
+  before(:each) do
+    game_path       = './data/games.csv'
+    team_path       = './data/teams.csv'
+    game_teams_path = './data/game_teams.csv'
 
     @locations = {
-      games:      @game_path,
-      teams:      @team_path,
-      game_teams: @game_teams_path
+      games:      game_path,
+      teams:      team_path,
+      game_teams: game_teams_path
     }
 
-    @stat_tracker = StatTracker.from_csv(@locations)
+    @stat_tracker = StatTracker.new(@locations)
   end
+
+  it ' test' do
+    expect(@stat_tracker.generate_stats(@locations[:games], Game)).to be_a(Game)
+  end
+
   it 'exists' do
-    expect(@stat_tracker).to be_an_instance_of StatTracker
+    expect(@stat_tracker).to be_a StatTracker
   end
 
   xit 'returns #highest_total_score' do
